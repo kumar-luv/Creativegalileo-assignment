@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { VscRefresh } from "react-icons/vsc";
 const Input = (props) => {
-  const { formData, setFormData, fetchData } = props;
+  const { formData, setFormData, fetchData, setPage } = props;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -75,7 +75,10 @@ const Input = (props) => {
       </div>
       <div className="flex justify-center gap-2 mt-3">
         <CiSearch
-          onClick={() => fetchData()}
+          onClick={() => {
+            setPage(1);
+            fetchData()}
+            }
           className="text-center text-2xl font-bold cursor-pointer "
         />
         <VscRefresh

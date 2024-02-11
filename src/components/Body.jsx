@@ -91,6 +91,7 @@ const Body = () => {
           formData={formData}
           setFormData={setFormData}
           fetchData={fetchData}
+          setPage={setPage}
         />
       </div>
       <div className="flex justify-between w-10/12 m-auto mt-2 text-1xl font-medium">
