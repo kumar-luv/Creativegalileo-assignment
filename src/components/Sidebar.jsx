@@ -10,7 +10,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div >
+    <div>
       <div
         className={`text-white cursor-pointer w-full justify-center flex gap-2 items-center text-center  ${
           isActive ? "bg-purple-950" : "bg-purple-500"

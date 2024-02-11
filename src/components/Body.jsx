@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import Input from "./Input";
 import User from "./User";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import { PAGE_SIZE} from "../utils/constants";
+import { PAGE_SIZE } from "../utils/constants";
+import { TOKEN } from "../utils/constants";
 
 const Body = () => {
   const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ const Body = () => {
   const [count, setCount] = useState(0);
   const [loader, setLoader] = useState(false);
   const leftClickHandler = () => {
-    setPage(page - 1);
+    setPage((prev) => (prev === 1 ? 1 : prev - 1));
   };
   const rightClickHandler = () => {
     setPage(page + 1);
@@ -55,8 +56,7 @@ const Body = () => {
         method: "GET",
         headers: {
           Accept: "application/json, text/plain, */*",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Yzg4ZjAwZi0wYWI4LTExZWUtOGZjOC0wYTU0NDNmNmE5NzgiLCJlbnRpdHlUeXBlIjoidXNlciIsInYiOiIwLjEiLCJpYXQiOjE3MDY1MDcxNjMsImV4cCI6MTczODA2NDc2M30.DLWxMAdaupi_559pwGdQyVH_rmQWS1zr_FZUJWp_w9U",
+          Authorization: `Bearer ${TOKEN}`,
         },
       });
 
@@ -65,13 +65,12 @@ const Body = () => {
       }
 
       const data = await response.json();
-      console.log(data);
       setCustomers(data?.data?.customers ?? []);
       setDisplayCustomers(data?.data?.customers ?? []);
       setCount(data?.data?.count ?? 0);
-      setLoader(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
       setLoader(false);
     }
   };
@@ -108,25 +107,30 @@ const Body = () => {
         })}
       </div>
 
-      <div className="flex justify-between items-center p-2 bg-white w-10/12 m-auto">
-        <div className="text-right w-full">
-          {` ${(page - 1) * PAGE_SIZE + 1}-${page * PAGE_SIZE} of ${count} `}
-        </div>
+      {count > 0 && (
+        <div className="flex justify-between items-center p-2 bg-white w-10/12 m-auto">
+          <div className="text-right w-full">
+            {` ${(page - 1) * PAGE_SIZE + 1}-${Math.min(
+              count,
+              page * PAGE_SIZE
+            )} of ${count} `}
+          </div>
 
-        <div className="flex gap-4 ml-2">
-          {page >= 1 && !loader && (
-            <button onClick={leftClickHandler} className="cursor-pointer">
-              <FaAngleLeft />
-            </button>
-          )}
+          <div className="flex gap-4 ml-2">
+            {page > 1 && !loader && (
+              <button onClick={leftClickHandler} className="cursor-pointer">
+                <FaAngleLeft />
+              </button>
+            )}
 
-          {page * PAGE_SIZE <= count && !loader && (
-            <button onClick={rightClickHandler} className="cursor-pointer">
-              <FaAngleRight />
-            </button>
-          )}
+            {page * PAGE_SIZE <= count && !loader && (
+              <button onClick={rightClickHandler} className="cursor-pointer">
+                <FaAngleRight />
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
