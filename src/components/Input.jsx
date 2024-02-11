@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { CiSearch } from "react-icons/ci";
 import { VscRefresh } from "react-icons/vsc";
 const Input = (props) => {
